@@ -130,4 +130,23 @@ document.addEventListener("keyup", (e)=>{
     else if(e.code==="ArrowLeft")  snek.direction = 3;
 });
 
+var startx = 0;
+var starty = 0;
+document.addEventListener("touchstart", (e)=>{
+    startx = e.changedTouches[0].clientX;
+    starty = e.changedTouches[0].clientY;
+});
+document.addEventListener("touchmove", (e)=>{
+    var dy = e.changedTouches[0].clientY-starty;
+    var dx = e.changedTouches[0].cleintX-startx;
+    
+    if(dy>dx){
+        if(dy<0) snek.direction = 0;
+        else     snek.direction = 2;
+    } else {
+        if(dx<0) snek.direction = 1;
+        else     snek.direction = 3;
+    }
+});
+
 var refreshIntevalId = setInterval(function(){gameLoop(snek, apple);}, tickSpeed);
