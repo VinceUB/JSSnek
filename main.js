@@ -1,6 +1,6 @@
-const height = 25;
-const width = 100;
-const tickSpeed = 200;
+var height = 25;
+var width = 100;
+var tickSpeed = 200;
 
 class Snek{
     constructor(startingX, startingY, direction){
@@ -106,7 +106,7 @@ function createApple(snek){ //todo: try/catch when game finishes
     return {x:x, y:y};
 }
 
-snek = new Snek(width/2 | 0, height/2 | 0, 0);
+var snek = new Snek(width/2 | 0, height/2 | 0, 0);
 var apple = createApple(snek);
 
 function gameLoop(snek, a){
@@ -117,36 +117,54 @@ function gameLoop(snek, a){
         apple = createApple(snek);
     }
     if(snek.isDying()){
-        clearInterval(refreshIntevalId);
         document.getElementById("score").innerHTML = "You are now dead. Score: " + snek.score().toString();
+        return true; //is dead
     }
     document.getElementById("snek").innerHTML = drawGame(snek.points(), apple);
 };
 
-document.addEventListener("keyup", (e)=>{
-    if     (e.code==="ArrowUp")    snek.direction = 0;
-    else if(e.code==="ArrowRight") snek.direction = 1;
-    else if(e.code==="ArrowDown")  snek.direction = 2;
-    else if(e.code==="ArrowLeft")  snek.direction = 3;
-});
 
-var startx = 0;
-var starty = 0;
-document.addEventListener("touchstart", (e)=>{
-    startx = e.changedTouches[0].clientX;
-    starty = e.changedTouches[0].clientY;
-});
-document.addEventListener("touchmove", (e)=>{
-    var dy = e.changedTouches[0].clientY-starty;
-    var dx = e.changedTouches[0].cleintX-startx;
+function initGame(){
+    height = parseInt(document.getElementById("height").value);
+    width = parseInt(document.getElementById("width").value);
+    tickSpeed = parseInt(document.getElementById("tickSpeed").value);
     
-    if(dy>dx){
-        if(dy<0) snek.direction = 0;
-        else     snek.direction = 2;
-    } else {
-        if(dx<0) snek.direction = 1;
-        else     snek.direction = 3;
-    }
-});
+    document.body.innerHTML = "<p id=\"score\"></p>\
+        <p id=\"snek\">is it working? who knows?</p>"
+    
+    snek = new Snek(width/2 | 0, height/2 | 0, 0);
+    apple = createApple(snek);
+    
+    document.addEventListener("keyup", (e)=>{
+        if     (e.code==="ArrowUp")    snek.direction = 0;
+        else if(e.code==="ArrowRight") snek.direction = 1;
+        else if(e.code==="ArrowDown")  snek.direction = 2;
+        else if(e.code==="ArrowLeft")  snek.direction = 3;
+    });
 
-var refreshIntevalId = setInterval(function(){gameLoop(snek, apple);}, tickSpeed);
+    var startx = 0;
+    var starty = 0;
+    document.addEventListener("touchstart", (e)=>{
+        startx = e.changedTouches[0].clientX;
+        starty = e.changedTouches[0].clientY;
+    });
+    document.addEventListener("touchmove", (e)=>{
+        var dy = e.changedTouches[0].clientY-starty;
+        var dx = e.changedTouches[0].cleintX-startx;
+
+        if(dy>dx){
+            if(dy<0) snek.direction = 0;
+            else     snek.direction = 2;
+        } else {
+            if(dx<0) snek.direction = 1;
+            else     snek.direction = 3;
+        }
+    });
+
+    var intervalId = setInterval(function(){
+        if(gameLoop(snek, apple)){
+            clearInterval(intervalId);
+            debugger;
+        }
+    }, tickSpeed);
+}

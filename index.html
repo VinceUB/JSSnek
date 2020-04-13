@@ -5,7 +5,21 @@
         <link rel=stylesheet type="text/css" href="style.css">
     </head>
     <body>
-        <p id="score"></p>
-        <p id="snek">is it working? who knows?</p>
+        <h1>Snek config:</h1>
+        <label for="height">Height:</label>
+        <input id="height" type="text" value="25">
+        <br/>
+        <label for="width">Width:</label>
+        <input id="width" type="text" value="50">
+        <br/>
+        <label for="tickSpeed">Milliseconds per Tick:</label>
+        <input id="tickSpeed" type="text" value="200">
+        <br/>
+        <input type="submit" id="butt" value="start snek gam">
+        
+        <script>
+            document.getElementById("butt").onclick = initGame;
+        </script>
+
     </body>
 </html>
