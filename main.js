@@ -55,12 +55,12 @@ class Snek{
     }
     
     isDying(){
-        if(this.x[0]>=width)                   return true;
-        if(this.x[0]<0)                        return true;
-        if(this.y[0]>=height)                  return true;
-        if(this.y[0]<0)                        return true;
+        if(this.x[0]>=width)                                 return true;
+        if(this.x[0]<0)                                      return true;
+        if(this.y[0]>=height)                                return true;
+        if(this.y[0]<0)                                      return true;
         
-        if (this.x.length<3) return false;
+        if (this.x.length<3)                                 return false;
         for(let i=1;i<this.x.length;i++){
             if(this.isConsuming({x:this.x[i], y:this.y[i]})) return true;
         }
@@ -131,6 +131,7 @@ function initGame(){
     
     document.body.innerHTML = "<p id=\"score\"></p>\
         <p id=\"snek\">is it working? who knows?</p>"
+        //<p id=\"debug\"></p>"
     
     snek = new Snek(width/2 | 0, height/2 | 0, 0);
     apple = createApple(snek);
@@ -147,24 +148,28 @@ function initGame(){
     document.addEventListener("touchstart", (e)=>{
         startx = e.changedTouches[0].clientX;
         starty = e.changedTouches[0].clientY;
+        //document.getElementById("debug").innerHTML = startx.toString() + ", " + starty.toString();
     });
     document.addEventListener("touchmove", (e)=>{
         var dy = e.changedTouches[0].clientY-starty;
-        var dx = e.changedTouches[0].cleintX-startx;
+        var dx = e.changedTouches[0].clientX-startx;
 
-        if(dy>dx){
+        if(Math.abs(dy)>Math.abs(dx)){
             if(dy<0) snek.direction = 0;
             else     snek.direction = 2;
         } else {
-            if(dx<0) snek.direction = 1;
-            else     snek.direction = 3;
+            if(dx<0) snek.direction = 3;
+            else     snek.direction = 1;
         }
+        /*document.getElementById("debug").innerHTML = 
+            startx.toString() + ", " + starty.toString() + "<br/>" + 
+            e.changedTouches[0].clientX.toString() + ", " + e.changedTouches[0].clientY.toString() + "<br/>" + 
+            dx.toString() + ", " + dy.toString();*/
     });
 
     var intervalId = setInterval(function(){
         if(gameLoop(snek, apple)){
             clearInterval(intervalId);
-            debugger;
         }
     }, tickSpeed);
 }
