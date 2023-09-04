@@ -10,6 +10,7 @@ class Snek{
         this.x[0] = startingX;
         this.y[0] = startingY;
         this.direction = direction;
+        this.pause = false;
     }
 
     points(){
@@ -111,6 +112,9 @@ var apple = createApple(snek);
 
 function gameLoop(snek, a){
     document.getElementById("score").innerHTML = "Apples eaten: " + snek.score().toString();
+    if (snek.pause) {
+        return false;
+    }
     snek.move();
     if(snek.isConsuming(a)){
         snek.grow();
@@ -141,6 +145,7 @@ function initGame(){
         else if(e.code==="ArrowRight") snek.direction = 1;
         else if(e.code==="ArrowDown")  snek.direction = 2;
         else if(e.code==="ArrowLeft")  snek.direction = 3;
+        else if(e.code==="Pause" || e.code==="P")      snek.pause = !snek.pause;
     });
 
     var startx = 0;
